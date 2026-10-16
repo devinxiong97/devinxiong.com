@@ -1,148 +1,96 @@
-# devinxiong.com
+# devinxiong.com — Resume Website + AI Chatbot
 
-My resume as a website, hosted on AWS, with an AI chatbot that answers questions about my experience and can walk through mock IT tickets.
+My resume as a live website on AWS, with an AI chatbot that answers recruiters' questions about my experience and walks through mock IT tickets.
 
-**Live site:** https://devinxiong.com
-
-I built this to get real hands-on time with AWS instead of just listing it on my resume. I wanted to set it up the way I'd want a real system set up: private by default, HTTPS everywhere, secrets kept server-side, and no way for it to run up a surprise bill.
+**Live:** [devinxiong.com](https://devinxiong.com)
 
 ---
 
-## How it works
+## The Problem
+
+A PDF resume only *says* I know AWS, DNS, and security. I wanted something I could actually show:
+- Real cloud infrastructure, set up the way I'd want a production system set up
+- Private by default, HTTPS everywhere, secrets kept server-side
+- A way for recruiters to get answers about my background without waiting on me
+- No chance of a surprise bill if someone abuses it
+
+This project is that.
+
+---
+
+## What It Does
+
+### 1. Hosts my resume on AWS
+A static site served from a **private S3 bucket** behind **CloudFront**. The bucket is never public. Only my CloudFront distribution can read it, using Origin Access Control. HTTPS comes from an **ACM certificate**, and the domain is on **Cloudflare DNS**.
+
+### 2. Answers questions with an AI chatbot
+Visitors click **Ask about Devin** and ask anything about my experience. A **Lambda** function sends the question to **Claude** along with my resume, a notes file I control, and the READMEs of my GitHub projects. The answer comes back in a couple of seconds.
+
+### 3. Runs mock IT tickets
+Visitors can click a sample like *"A user is locked out of Okta after losing their phone"* and get a demo ticket back: priority, category, numbered steps, and the related project. It follows the same triage format as my [IT Service Agent](https://github.com/devinxiong97/it-service-agent).
+
+### 4. Keeps costs capped
+Prepaid API credits with auto-reload off mean the chatbot can never cost more than $5. CloudFront is on the flat-rate free plan, so traffic spikes can't create overage charges.
+
+---
+
+## Architecture
 
 ```
-Visitor
-  │
-  ▼
-Cloudflare DNS (devinxiong.com, DNS only)
-  │
-  ▼
-CloudFront (HTTPS via ACM certificate, DDoS protection, caching)
-  │
-  ├── /*          ──▶ S3 bucket (private, read only through Origin Access Control)
-  │
-  └── /api/visit  ──▶ Lambda: visit counter ──▶ DynamoDB (in progress)
+Visitor ──▶ Cloudflare DNS ──▶ CloudFront (HTTPS, cache, DDoS protection)
+                                   │
+                                   ├── /*         ──▶ S3 (private, OAC only)
+                                   └── /api/visit ──▶ Lambda ──▶ DynamoDB   (in progress)
 
-Chat box on the page ──▶ Lambda Function URL: chatbot ──▶ Claude API (Haiku)
+Chat box ──▶ Lambda Function URL ──▶ Claude API
 ```
 
-| Piece | Service | Why |
-|---|---|---|
-| Site files | S3, private bucket | Files are never publicly exposed |
-| Delivery + HTTPS | CloudFront with Origin Access Control | Only CloudFront can read the bucket. HTTPS, caching, DDoS protection |
-| Certificate | AWS Certificate Manager (us-east-1) | Free TLS cert, renews on its own |
-| Domain + DNS | Cloudflare | About $10/yr, cheaper than Route 53 |
-| Chatbot | AWS Lambda (Python 3.13) + Function URL | No server to run or patch, costs nothing when idle |
-| AI model | Claude Haiku via the Claude API | Answering from a resume is a simple task, so a small cheap model is plenty |
-| Visit counter | Lambda + DynamoDB (in progress) | Counts visits by country only |
-| Analytics | Cloudflare Web Analytics | Cookieless, country level, no individual tracking |
+Full diagram and request flows: [ARCHITECTURE.md](ARCHITECTURE.md)
 
 ---
 
-## Repo layout
+## Tech Stack
 
-```
-site/                       the website (uploaded to S3)
-  index.html
-  styles.css
-  script.js
-  bot-notes.txt             extra info the chatbot can share (career gap, etc.)
-lambda/
-  chatbot/lambda_function.py
-  visit-counter/lambda_function.py
-aws/
-  s3-bucket-policy.json     example bucket policy for CloudFront OAC
-  visit-counter-iam-policy.json
-```
+| Tool | Purpose |
+|------|---------|
+| **Amazon S3** | Stores the site files in a private bucket |
+| **Amazon CloudFront** | HTTPS, caching, DDoS protection, Origin Access Control |
+| **AWS Certificate Manager** | Free TLS certificate for the custom domain |
+| **Cloudflare DNS** | Domain registration and DNS (DNS only, not proxied) |
+| **AWS Lambda (Python 3.13)** | Chatbot backend, no server to run or patch |
+| **Claude API (Haiku)** | Writes the chatbot answers and mock tickets |
+| **Amazon DynamoDB** | Visit counts by country (in progress) |
+| **CloudWatch Logs** | Errors and token usage per question |
+| **Cloudflare Web Analytics** | Cookieless, country-level visitor stats |
 
 ---
 
-## Setup, step by step
+## Security
 
-### 1. S3 bucket
-- Created a bucket and kept **Block all public access ON**.
-- Did **not** turn on S3 static website hosting. That needs a public bucket and doesn't do HTTPS on a custom domain.
-- Uploaded the files in `site/`.
-
-### 2. CloudFront
-- Created a distribution with the S3 bucket as the origin (the REST endpoint, not the website endpoint).
-- Turned on **Origin Access Control**. CloudFront added a bucket policy that only allows this one distribution to read the bucket (see `aws/s3-bucket-policy.json`).
-- Viewer protocol policy: **Redirect HTTP to HTTPS**.
-- Default root object: `index.html`.
-- Picked the **Free flat-rate plan**, which includes DDoS protection and WAF and has no overage charges.
-
-### 3. Domain, certificate, DNS
-- Bought `devinxiong.com` on Cloudflare.
-- Requested a certificate for `devinxiong.com` and `www.devinxiong.com` in **ACM (us-east-1)**, which CloudFront requires.
-- Added ACM's two CNAME validation records in Cloudflare. Once they were in, ACM issued the cert.
-- Attached the cert to CloudFront as alternate domain names.
-- Pointed `@` and `www` at the CloudFront domain with CNAME records (Cloudflare flattens the root CNAME).
-- **Every record is DNS only (grey cloud).** CloudFront already does caching and DDoS protection, and proxying through Cloudflare broke certificate validation.
-
-### 4. Chatbot (Lambda)
-- Python 3.13 Lambda, 256 MB, 30 second timeout.
-- Packaged with the `anthropic` library in AWS CloudShell:
-  ```bash
-  mkdir -p package
-  pip3 install anthropic -t package --platform manylinux2014_x86_64 --only-binary=:all: --python-version 3.13
-  cp lambda_function.py package/
-  cd package && zip -qr ../function.zip . && cd ..
-  aws lambda update-function-code --function-name resume-chatbot --zip-file fileb://function.zip --region us-east-2
-  ```
-- The Claude API key is stored in the Lambda environment variable `ANTHROPIC_API_KEY`. It is never in the website code or this repo.
-- Function URL with auth type NONE, and CORS limited to `https://devinxiong.com` and `https://www.devinxiong.com`.
-- The bot answers from my resume, `bot-notes.txt`, and the READMEs of my public GitHub repos, all passed in as context. No training and no vector database, since the data is small enough to fit in one request.
-- Mock tickets come back as structured JSON (priority, category, steps, related repo), and the page renders them as a ticket card.
-
-### 5. Visit counter (in progress)
-- DynamoDB table `site-visits` with partition key `id`.
-- Lambda reads the `CloudFront-Viewer-Country` header that CloudFront adds, and stores only the country code. No IP addresses are stored.
-- CloudFront routes `/api/*` to the Lambda and adds a secret `x-origin-verify` header, so the Lambda refuses anything that didn't come through CloudFront.
-- IAM permissions are limited to `UpdateItem` and `Scan` on that one table (see `aws/visit-counter-iam-policy.json`).
-
-### 6. Analytics
-- Cloudflare Web Analytics with the manual JS snippet. Cookieless, country level only.
+- **Private bucket.** A direct S3 link returns Access Denied. CloudFront is the only way in.
+- **Secrets stay server-side.** The API key lives only in Lambda's environment, never in the site code or this repo.
+- **Locked-down chatbot.** Only my domain can call it. I tested a request from another origin and got 403 Forbidden.
+- **Input and output limits.** Questions capped at 500 characters, answers capped in length.
+- **No HTML injection.** Bot replies are inserted as plain text.
+- **Hard spending cap.** $5 prepaid credits, auto-reload off.
 
 ---
 
-## Security and cost controls
+## Files
 
-- **Private bucket.** Only my CloudFront distribution can read it. A direct S3 link returns Access Denied.
-- **HTTPS everywhere.** HTTP redirects to HTTPS.
-- **Secrets stay server-side.** The API key only exists in Lambda's environment.
-- **Origin check.** The chatbot only accepts requests from my domain. I tested a request from another origin and got 403 Forbidden.
-- **Limits.** Questions are capped at 500 characters, answers are capped in length, and only recent chat history is sent.
-- **No HTML injection.** Bot replies are inserted as plain text, never as HTML.
-- **Hard spending cap.** The Claude API runs on prepaid credits with auto-reload off, so the most the bot can ever cost is $5. CloudFront is on a flat-rate plan with no overages.
-- **Cost:** about $0.001 per chatbot question. Hosting is $0. The domain is about $10 a year.
-
-The origin header can be faked outside a browser, so the spending cap is the real backstop. A WAF rate rule is the next layer I'd add.
-
----
-
-## Things that broke and how I fixed them
-
-| Problem | Cause | Fix |
-|---|---|---|
-| `ResourceNotFoundException` when deploying | The function was in us-east-2, the CLI was looking in us-east-1 | Deployed to the right region |
-| Runtime set to Python 3.14 | The packaged libraries (pydantic-core, jiter) were built for 3.13 | Switched the runtime to 3.13 |
-| Chatbot returned 502 | CloudWatch Logs showed no API key. The variable existed but its value was empty | Re-entered the key, checking only the first few characters so the full key was never printed |
-| ACM validation records rejected | Cloudflare proxies new records by default | Set them to DNS only |
-| Site changes not showing | The invalidation only cleared `/`, not `/*` | Invalidated `/*` |
-| "Couldn't connect" when testing | I was opening the file locally (origin `null`), which the bot blocks on purpose | Tested on the live domain |
-| An API key got exposed | Pasted somewhere it shouldn't have been | Revoked it right away and made a new one |
+| File | Purpose |
+|------|---------|
+| `site/` | The website: `index.html`, `styles.css`, `script.js`, and `bot-notes.txt` (extra info the bot can share) |
+| `lambda/chatbot/` | Chatbot Lambda: builds the prompt, calls Claude, returns answers or mock tickets |
+| `lambda/visit-counter/` | Visit counter Lambda: counts visits by country only |
+| `aws/` | Example bucket policy and IAM policy, with account details removed |
+| [`ARCHITECTURE.md`](ARCHITECTURE.md) | How it all fits together, and why I made each choice |
+| [`SETUP.md`](SETUP.md) | Step-by-step playbook to build it from scratch |
+| [`ROADMAP.md`](ROADMAP.md) | What's live and what's next |
+| [`docs/troubleshooting.md`](docs/troubleshooting.md) | Everything that broke and how I fixed it |
 
 ---
 
-## What I'd add next
+## How I Built It
 
-- Secrets Manager for the API key, with rotation
-- A WAF rate-based rule in front of the chatbot
-- Terraform for the whole setup
-- GitHub Actions to deploy on push (upload to S3, invalidate CloudFront, update Lambda)
-
----
-
-## How I built it
-
-I used Claude as a pair programmer, and it wrote a lot of the code. I made the architecture and security decisions, did all the AWS and DNS setup myself, deployed it, and debugged it from the logs when things broke.
+I used Claude as a pair programmer, and it wrote a lot of the code. I made the architecture and security decisions, did all the AWS and DNS setup myself, deployed it, and debugged it from the CloudWatch logs when things broke.
