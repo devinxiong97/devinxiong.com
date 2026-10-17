@@ -1,0 +1,16 @@
+# Lambda build output
+package/
+*.zip
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Secrets - never commit these
+.env
+*.pem
+
+# OS
+.DS_Store
+Thumbs.db
