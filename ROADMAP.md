@@ -77,7 +77,7 @@ Right now deploys are manual: upload to S3, invalidate CloudFront, repackage Lam
 ## Phase 5 — Better Chatbot
 
 ```
-[ ] Log questions (no personal data) to see what recruiters actually ask
+[ ] Log questions (no personal data) to see what visitors actually ask
 [ ] Use those logs to fill gaps in bot-notes.txt
 [ ] Prompt caching to cut cost per question
 [ ] "Message Devin" button that sends a push notification to my phone
