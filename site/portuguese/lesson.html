@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson | Brazilian Portuguese</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="course.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="index.html"><span class="brand-flag"></span>Português Brasileiro</a>
+      <nav>
+        <a href="index.html">Course home</a>
+        <button class="icon-btn" id="settings-btn" aria-label="Settings">⚙️</button>
+        <button class="icon-btn" id="theme-toggle" aria-label="Toggle dark mode">◐</button>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="crumbs"><a href="index.html">Course</a> · <span id="crumb-unit"></span></div>
+    <div id="lesson"><p class="muted">Loading lesson…</p></div>
+  </main>
+
+  <dialog id="settings">
+    <h3>Sync and tutor</h3>
+    <p class="muted">Enter your private sync key to unlock the AI tutor and sync progress across your devices.</p>
+    <input id="sync-key" type="password" autocomplete="off" placeholder="Sync key">
+    <div style="display:flex;gap:8px;justify-content:space-between;flex-wrap:wrap">
+      <button class="btn" id="settings-reset">Clear this browser's progress</button>
+      <span style="display:flex;gap:8px">
+        <button class="btn" onclick="this.closest('dialog').close()">Cancel</button>
+        <button class="btn primary" id="settings-save">Save</button>
+      </span>
+    </div>
+  </dialog>
+
+  <script src="course.js"></script>
+</body>
+</html>
