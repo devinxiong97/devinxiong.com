@@ -18,6 +18,8 @@ The site and chatbot are live.
 | Mock IT tickets as structured JSON, rendered as ticket cards | Live |
 | Origin check, input/output limits, $5 prepaid spending cap | Live |
 | Cloudflare Web Analytics (cookieless, country level) | Live |
+| Brazilian Portuguese course at /portuguese/ (Week 1 of 16) | Live |
+| Native Brazilian audio with Amazon Polly (Camila) | Live |
 | Visit counter by country (Lambda + DynamoDB) | In progress |
 
 ---
@@ -43,6 +45,7 @@ The controls work, but some are "good enough for a personal project." This phase
 **Goal:** Close the gaps I'd flag if I were reviewing someone else's setup.
 
 ```
+[ ] Turn on S3 versioning so a bad upload can be rolled back
 [ ] Move ANTHROPIC_API_KEY to AWS Secrets Manager, with rotation
 [ ] WAF rate-based rule in front of the chatbot
       The origin header can be faked outside a browser, so rate limiting
@@ -78,4 +81,16 @@ Right now deploys are manual: upload to S3, invalidate CloudFront, repackage Lam
 [ ] Use those logs to fill gaps in bot-notes.txt
 [ ] Prompt caching to cut cost per question
 [ ] "Message Devin" button that sends a push notification to my phone
+```
+
+---
+
+## Phase 6 — Finish the Portuguese Course
+
+```
+[ ] Weeks 2–8 (PORT 101) and 9–16 (PORT 102) as JSON lessons
+[ ] Polly audio for every week
+[ ] AI tutor Lambda: conversation practice that knows the current week
+[ ] Private sync key so progress follows me across devices (DynamoDB)
+[ ] CloudFront function so /portuguese/ loads without typing index.html
 ```
