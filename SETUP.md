@@ -113,6 +113,27 @@ The runtime has to match `--python-version`. Some of the libraries are compiled 
 
 ---
 
+## Phase 7 — Portuguese Course + Polly Audio
+
+### 7.1 Upload the course into its own folder
+1. **S3 → bucket → Upload → Add folder**, choose `site/portuguese`
+2. Confirm the list shows `portuguese/index.html` and `portuguese/data/week-01.json`, not `index.html` at the top level. Uploading course files to the top level overwrites the resume
+3. Upload `site/index.html` (the resume, with the Learn Portuguese link) to the **top level**
+
+### 7.2 Generate Brazilian audio with Polly (CloudShell)
+```bash
+python3 make_audio.py --week 1               # Camila (default)
+python3 make_audio.py --week 1 --voice Thiago
+```
+The script reads `portuguese/data/week-NN.json` from S3, sends each phrase to Polly once, and writes `portuguese/audio/<id>.mp3`. Phrases that already have audio are skipped.
+
+### 7.3 Publish a new week
+1. Add `site/portuguese/data/week-NN.json`
+2. Add the week number to `PUBLISHED` in `site/portuguese/course.js`
+3. Upload both, run `make_audio.py --week NN`, and invalidate `/*`
+
+---
+
 ## Updating the Site
 
 ```
