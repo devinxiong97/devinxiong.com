@@ -1,0 +1,143 @@
+{
+  "week": 1,
+  "title": "Sounds, Greetings, and Who You Are",
+  "summary": "Your first week: how Brazilian Portuguese sounds, how to greet people like a local, and the verb **ser** so you can say who you are.",
+  "objectives": [
+    "Pronounce nasal sounds like [[não]], [[mãe]], and [[pão]]",
+    "Greet people casually and politely, any time of day",
+    "Conjugate **ser** (to be) for every pronoun",
+    "Introduce yourself: your name, where you're from, and what you do"
+  ],
+  "sections": [
+    {
+      "kind": "pronunciation",
+      "heading": "How Brazilian Portuguese sounds",
+      "bullets": [
+        "**Nasal vowels:** air goes through your nose. [[não]] (no), [[mãe]] (mother), [[pão]] (bread), [[bom]] (good)",
+        "**T and D before an 'i' sound** become 'ch' and 'j' in most of Brazil: [[tia]] sounds like 'CHEE-ah', [[dia]] like 'JEE-ah'",
+        "**A final 'e'** usually sounds like 'ee': [[leite]] (milk) sounds like 'LAY-chee', [[noite]] (night) like 'NOY-chee'",
+        "**R at the start of a word** sounds like an English 'h': [[Rio]] sounds like 'HEE-oo', [[rua]] (street) like 'HOO-ah'",
+        "**Final 'o'** sounds like 'oo': [[obrigado]] ends in 'doo'"
+      ],
+      "paragraphs": ["Tap any green phrase to hear it in a Brazilian voice. Say it back out loud every time. Your mouth needs the practice as much as your brain does."]
+    },
+    {
+      "kind": "grammar",
+      "heading": "The verb SER (to be): permanent things",
+      "paragraphs": ["**Ser** is for identity: who you are, where you're from, what you do, what something is like by nature."],
+      "table": {
+        "columns": ["Pronoun", "SER", "Example"],
+        "rows": [
+          ["eu (I)", "[[sou]]", "[[Eu sou o Devin.]]"],
+          ["você (you)", "[[é]]", "[[Você é de onde?]]"],
+          ["ele / ela (he / she)", "[[é]]", "[[Ela é engenheira.]]"],
+          ["a gente (we, casual)", "[[é]]", "[[A gente é amigo.]]"],
+          ["nós (we, formal)", "[[somos]]", "[[Nós somos americanos.]]"],
+          ["vocês (you all)", "[[são]]", "[[Vocês são do Brasil?]]"],
+          ["eles / elas (they)", "[[são]]", "[[Eles são legais.]]"]
+        ]
+      }
+    },
+    {
+      "kind": "structure",
+      "heading": "You can drop the 'I'",
+      "paragraphs": [
+        "The verb ending already tells you who's talking, so Portuguese often skips the pronoun. [[Sou de Boston]] means 'I'm from Boston.' No [[eu]] needed.",
+        "**Where you're from** uses **ser + de**: [[Sou de Boston]], [[Ela é do Brasil]]. You'll learn why it's [[do]] and not [[de o]] in Week 6."
+      ]
+    },
+    {
+      "kind": "vocab",
+      "heading": "Greetings and basics",
+      "phrases": [
+        ["Oi", "Hi"],
+        ["Olá", "Hello (a bit more formal)"],
+        ["Bom dia", "Good morning"],
+        ["Boa tarde", "Good afternoon"],
+        ["Boa noite", "Good evening / good night"],
+        ["Tudo bem?", "How's it going?"],
+        ["Tudo, e você?", "Good, and you?"],
+        ["Meu nome é...", "My name is..."],
+        ["Prazer", "Nice to meet you"],
+        ["Obrigado", "Thank you (said by a man)"],
+        ["Obrigada", "Thank you (said by a woman)"],
+        ["Por favor", "Please"],
+        ["Desculpa", "Sorry"],
+        ["Tchau", "Bye"],
+        ["Até logo", "See you later"]
+      ]
+    },
+    {
+      "kind": "nuance",
+      "heading": "What textbooks don't tell you",
+      "bullets": [
+        "**Obrigado vs obrigada** depends on **your** gender, not the other person's. As a man, you always say [[obrigado]].",
+        "**Tudo bem?** is a greeting, not a real question. Nobody wants your life story. Answer [[Tudo, e você?]] or just [[Tudo bem!]]",
+        "**Boa noite** works for both 'good evening' when you arrive and 'good night' when you leave.",
+        "**Você** is the normal word for 'you' almost everywhere in Brazil. You'll hear **tu** in the South and parts of the Northeast, which we cover in Week 15."
+      ]
+    },
+    {
+      "kind": "slang",
+      "heading": "Sound like a local",
+      "phrases": [
+        ["E aí?", "What's up?"],
+        ["Beleza?", "All good? (answer: Beleza!)"],
+        ["Valeu!", "Thanks! (casual)"],
+        ["Falou!", "Later! / See ya!"],
+        ["Tranquilo", "All good / no worries"]
+      ],
+      "paragraphs": ["A typical casual exchange: [[E aí, beleza?]] → [[Beleza, e você?]] → [[Tranquilo!]]"]
+    }
+  ],
+  "drills": [
+    { "prompt": "eu + **ser**", "answer": "sou" },
+    { "prompt": "você + **ser**", "answer": "é" },
+    { "prompt": "ela + **ser**", "answer": "é" },
+    { "prompt": "a gente + **ser**", "answer": "é" },
+    { "prompt": "nós + **ser**", "answer": "somos" },
+    { "prompt": "vocês + **ser**", "answer": "são" },
+    { "prompt": "eles + **ser**", "answer": "são" },
+    { "prompt": "Say: *Good morning*", "answer": "bom dia" },
+    { "prompt": "Say: *Good afternoon*", "answer": "boa tarde" },
+    { "prompt": "Say: *Nice to meet you* (one word)", "answer": "prazer" },
+    { "prompt": "You're a man. Say *thank you*.", "answer": "obrigado" },
+    { "prompt": "Say: *I am from Boston* (skip the 'eu')", "answer": ["sou de boston", "eu sou de boston"] },
+    { "prompt": "Say: *My name is Devin*", "answer": ["meu nome é devin", "o meu nome é devin"] },
+    { "prompt": "Casual: *What's up?*", "answer": ["e aí", "e ai"] },
+    { "prompt": "Casual: *Thanks!*", "answer": "valeu" }
+  ],
+  "flashcards": [
+    ["Oi", "Hi"],
+    ["Bom dia", "Good morning"],
+    ["Boa tarde", "Good afternoon"],
+    ["Boa noite", "Good evening / good night"],
+    ["Tudo bem?", "How's it going?"],
+    ["Prazer", "Nice to meet you"],
+    ["Obrigado", "Thank you (man speaking)"],
+    ["Desculpa", "Sorry"],
+    ["Eu sou de Boston", "I'm from Boston"],
+    ["Ela é engenheira", "She's an engineer"],
+    ["E aí, beleza?", "Hey, all good?"],
+    ["Valeu!", "Thanks!"],
+    ["Falou!", "Later!"],
+    ["Até logo", "See you later"]
+  ],
+  "quiz": [
+    { "q": "Conjugate: **eu** + ser", "answers": ["sou"] },
+    { "q": "Conjugate: **vocês** + ser", "answers": ["são"] },
+    { "q": "Conjugate: **nós** + ser", "answers": ["somos"] },
+    { "q": "Which verb form goes with **a gente**?", "choices": ["somos", "é", "são", "sou"], "answer": 1 },
+    { "q": "Devin (a man) wants to say thank you. He says:", "choices": ["Obrigada", "Obrigado", "Either one, it depends on who he's thanking"], "answer": 1 },
+    { "q": "Someone says *Tudo bem?* The most natural reply is:", "choices": ["A long answer about your day", "Tudo, e você?", "Não"], "answer": 1 },
+    { "q": "In most of Brazil, *dia* sounds like:", "choices": ["DEE-ah", "JEE-ah", "DYE-ah"], "answer": 1 },
+    { "q": "Translate: *I am from Boston.*", "answers": ["sou de boston", "eu sou de boston"] },
+    { "q": "Translate: *She is Brazilian.* (Brazilian = brasileira)", "answers": ["ela é brasileira", "é brasileira"] },
+    { "q": "What does *Valeu!* mean?", "choices": ["Goodbye forever", "Thanks!", "Excuse me"], "answer": 1 }
+  ],
+  "tutor_prompts": [
+    "Let's practice greetings. You're my new coworker in São Paulo. Introduce yourself to me in Portuguese.",
+    "Quiz me on conjugating ser. Give me a pronoun, I'll answer, and correct me.",
+    "Have a casual E aí, beleza? style chat with me using simple Portuguese, and correct my mistakes in English."
+  ]
+}
