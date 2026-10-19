@@ -1,0 +1,49 @@
+# BOT NOTES - extra things the chatbot can tell visitors about Devin
+#
+# How this file works:
+# - Lines starting with # are instructions for you. The bot never sees them.
+# - Write your answers under each heading in plain sentences, in your own words.
+# - Leave a section empty if you don't want the bot to talk about it.
+#   The bot will then say it doesn't have that detail and suggest emailing you.
+# - This file is PUBLIC (anyone can open devinxiong.com/bot-notes.txt).
+#   Only write what you'd be happy to say to any recruiter.
+# - After editing, upload it to your S3 bucket and invalidate /* in CloudFront.
+#   The bot picks up changes within about 10 minutes.
+
+## Career gap (Mar 2025 - Jul 2026)
+After more than two years at Brightcove, Devin took a planned break in 2025 to reset, recharge, and get clear on the next step in his career. He spent about seven to eight months traveling the world.
+
+When he returned, the hiring market was slow, so he used the time to deliberately upskill. He went deep on AI, learning it hands-on by building with tools like Claude to automate IT work, and he studied cybersecurity and earned his CompTIA Security+ (SY0-701) certification.
+
+He came back in July 2026 as a Senior IT Support Analyst at RxSense, bringing those AI and security skills straight into the role.
+
+
+## What Devin is looking for next
+# Role types, team size, the kind of work that excites you.
+
+
+## Location and work setup
+# City/area, open to remote / hybrid / onsite, open to relocating or not.
+
+
+## Work authorization
+# Only if you want it shared, e.g. "Authorized to work in the US without sponsorship."
+
+
+## Availability
+# e.g. "Open to conversations now; typical notice period is two weeks."
+
+
+## Hobbies and interests
+# Things that make you a person, not a resume. Photography and video, for example.
+
+
+## How Devin works / what coworkers would say
+# Two or three traits, ideally with a quick example.
+
+
+## Side projects
+# e.g. this website: S3 + CloudFront + Cloudflare DNS + Lambda + Claude chatbot.
+
+
+## Anything else you want the bot to know
