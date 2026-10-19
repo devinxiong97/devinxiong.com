@@ -106,4 +106,43 @@ Full diagram, request flows, and design decisions: [ARCHITECTURE.md](ARCHITECTUR
 
 ## How I Built It
 
-I used Claude as a pair programmer, and it wrote a lot of the code. I made the architecture and security decisions, did all the AWS and DNS setup myself, deployed it, and debugged it from the logs and live responses when things broke. The [troubleshooting log](docs/troubleshooting.md) has every one of those.
+### The decisions I made, and why
+
+| Decision | Why I made it |
+|---|---|
+| **Kept the storage bucket private** instead of making it public | A public bucket means anyone can reach the files directly. I wanted one controlled way in. |
+| **Put CloudFront in front of everything** | It gives HTTPS, speed, and DDoS protection, and it's the only thing allowed to read the bucket. |
+| **Picked CloudFront's flat-rate plan** | If someone floods the site with traffic, the bill can't grow. Cost risk was a design requirement, not an afterthought. |
+| **Bought the domain on Cloudflare, not AWS** | About half the yearly cost. The trade-off was setting up DNS and certificate records by hand, which I did. |
+| **Capped the chatbot at $5, total** | Prepaid credits with auto-reload off. Even if someone abuses it, the worst case is the bot goes quiet, not a surprise bill. |
+| **Locked the chatbot to my domain only** | Other websites can't use my API. I tested it by sending a request from a fake site and confirming it was blocked. |
+| **Used a small, cheap AI model** | Answering questions from a resume is a simple job. About a tenth of a cent per question. |
+| **Tracked visitors by country only** | Enough to see my reach without storing anyone's personal data. |
+| **Switched to Amazon Polly for pronunciation** | I noticed the browser's voice didn't sound Brazilian. Polly records each phrase once with a native-sounding Brazilian voice, so it sounds right in every browser. |
+| **Rotated an exposed API key immediately** | I treated it as a security incident: revoke first, replace second. |
+
+### What I set up and ran myself
+- Created and secured the storage, CDN, certificate, and DNS, then connected the domain end to end
+- Deployed the chatbot backend, configured its settings, and stored its secret key server-side
+- Generated the Portuguese audio with Polly and published the course in its own section, separate from the resume
+- Found and fixed 14 real problems by reading logs, testing live URLs, and checking one layer at a time. Every one is written up in the [troubleshooting log](docs/troubleshooting.md)
+
+### Terms in plain English
+
+| Term | What it means |
+|---|---|
+| **S3** | AWS file storage. My website files live here. |
+| **CloudFront** | AWS's delivery network. It serves the site fast from locations worldwide and handles HTTPS. |
+| **OAC (Origin Access Control)** | A lock between CloudFront and S3. Only my CloudFront can read the files; everyone else gets "Access Denied." |
+| **ACM (Certificate Manager)** | Gives the site its free security certificate, the padlock in the browser. |
+| **DNS** | The internet's phone book. It points `devinxiong.com` at my site. |
+| **Cache invalidation** | Telling CloudFront to throw out its saved copies so visitors see my latest changes. |
+| **Lambda** | Code that runs only when needed. No server to maintain, and no cost when idle. |
+| **CORS** | A browser rule I set so only my website can use my chatbot. |
+| **Environment variable** | A secure place inside Lambda to store a secret, like an API key, so it's never in the website code. |
+| **Least privilege** | Giving each part only the exact access it needs. The visitor counter can touch one table and nothing else. |
+| **Amazon Polly** | AWS text-to-speech. It produces natural-sounding audio in many languages and accents. |
+| **Structured output** | Making the AI answer in a fixed format, so mock tickets always look the same and can't break the page. |
+
+### How I used AI
+I used Claude as a coding assistant to write and iterate on the code faster, the same way I use it at work for PowerShell and Python. The architecture, the security and cost decisions, the setup, and the troubleshooting were mine.
