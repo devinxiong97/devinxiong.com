@@ -101,6 +101,7 @@ Full diagram, request flows, and design decisions: [ARCHITECTURE.md](ARCHITECTUR
 | [`ROADMAP.md`](ROADMAP.md) | What's live and what's next |
 | [`docs/troubleshooting.md`](docs/troubleshooting.md) | Everything that broke and how I fixed it |
 | [`docs/learning-notes.md`](docs/learning-notes.md) | Every concept the project uses, explained plainly |
+| [`docs/build-log.md`](docs/build-log.md) | Dated log of what I've added since, and why |
 
 ---
 
