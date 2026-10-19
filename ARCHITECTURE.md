@@ -15,7 +15,7 @@ flowchart TD
     end
 
     subgraph Storage["Amazon S3"]
-        S3[Private bucket\nindex.html, styles.css,\nscript.js, bot-notes.txt]
+        S3[Private bucket\nresume at top level\nportuguese/ course + audio]
     end
 
     subgraph Chat["Chatbot"]
@@ -37,6 +37,11 @@ flowchart TD
         DDB[(DynamoDB\nsite-visits)]
     end
 
+    subgraph Speech["Amazon Polly"]
+        MA[make_audio.py\nrun in CloudShell]
+        PL[Neural pt-BR voice\nCamila]
+    end
+
     V -->|DNS lookup| CF
     CF --> CDN
     V -->|HTTPS| CDN
@@ -48,6 +53,8 @@ flowchart TD
     BOT --> CL
     BOT -.cached 1 hr.-> GH
     BOT -.cached 10 min.-> NOTES
+    MA --> PL
+    PL -->|audio/<id>.mp3| S3
 ```
 
 ---
@@ -76,6 +83,15 @@ Same as above, but if the question contains "mock ticket", Lambda asks Claude fo
 3. Lambda rejects anything without the secret, then adds 1 to the total and to that country in DynamoDB.
 4. Only the country code is stored. No IP addresses.
 
+### Playing Portuguese audio
+1. A lesson phrase like *Bom dia* is a button on the page.
+2. When tapped, `course.js` computes an id: the first 16 hex characters of the phrase's SHA-1.
+3. It plays `portuguese/audio/<id>.mp3` from CloudFront. `make_audio.py` created that file earlier with Polly, using the same id.
+4. If the recording doesn't exist, it falls back to a Brazilian (`pt-BR`) browser voice, never a Portugal one.
+
+### Keeping the course separate from the resume
+The resume lives at the top level of the bucket and the course lives under the `portuguese/` prefix. Both have an `index.html`, so the prefix is the only thing keeping one from overwriting the other.
+
 ---
 
 ## Design Decisions
@@ -92,6 +108,9 @@ Same as above, but if the question contains "mock ticket", Lambda asks Claude fo
 | Vector database vs prompt context | Prompt context | My data is small enough to fit in one request | If it grew to hundreds of documents |
 | Free text vs structured output for tickets | Structured JSON | Same shape every time, can't break the page layout | — |
 | Visit tracking | Country code only | Enough to see reach without storing anything personal | — |
+| Browser speech vs Amazon Polly | Polly neural pt-BR, pre-generated | Browser voices vary by device, and Brave has no Brazilian voice | — |
+| Audio lookup | SHA-1 of the phrase as the file name | Browser and script compute the same id, so no manifest file is needed | If phrases needed per-voice variants |
+| Course pages | One lesson template + a JSON file per week | Adding a week is data, not code | — |
 
 ---
 
@@ -102,4 +121,5 @@ Same as above, but if the question contains "mock ticket", Lambda asks Claude fo
 | S3 + CloudFront (Free plan) | $0 |
 | Lambda + DynamoDB at this traffic | ~$0 (free tier) |
 | Claude API | ~$0.001 per question, hard cap $5 prepaid |
+| Amazon Polly (neural) | ~$16 per million characters, well under | Claude API | ~$0.001 per question, hard cap $5 prepaid | for the whole course, generated once |
 | Domain (Cloudflare) | ~$10/year |
