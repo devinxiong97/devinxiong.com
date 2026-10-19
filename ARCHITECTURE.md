@@ -121,5 +121,5 @@ The resume lives at the top level of the bucket and the course lives under the `
 | S3 + CloudFront (Free plan) | $0 |
 | Lambda + DynamoDB at this traffic | ~$0 (free tier) |
 | Claude API | ~$0.001 per question, hard cap $5 prepaid |
-| Amazon Polly (neural) | ~$16 per million characters, well under | Claude API | ~$0.001 per question, hard cap $5 prepaid | for the whole course, generated once |
+| Amazon Polly (neural) | ~$16 per million characters, well under $1 for the whole course, generated once |
 | Domain (Cloudflare) | ~$10/year |
