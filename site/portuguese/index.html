@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Brazilian Portuguese | Self-Paced Course</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="course.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="index.html"><span class="brand-flag"></span>Português Brasileiro</a>
+      <nav>
+        <a href="../index.html" class="hide-sm">← devinxiong.com</a>
+        <button class="icon-btn" id="settings-btn" aria-label="Settings">⚙️</button>
+        <button class="icon-btn" id="theme-toggle" aria-label="Toggle dark mode">◐</button>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <p class="mono" style="color:var(--accent)">PORT 101 + PORT 102 · 16 weeks</p>
+      <h1>Brazilian Portuguese, the way locals speak it</h1>
+      <p>Grammar and conjugation, sentence structure, nuance, and slang. Each week has a lesson, drills, flashcards with a Brazilian voice, a quiz, and an AI tutor. Pass a week's quiz with 80% to unlock the next.</p>
+      <div class="progress-wrap">
+        <div class="progress"><span id="progress-bar" style="width:0"></span></div>
+        <span class="muted" id="progress-text"></span>
+        <a class="btn primary" id="continue" href="lesson.html?week=1">Start Week 1 →</a>
+      </div>
+    </section>
+
+    <div id="units"></div>
+
+    <section class="card" style="margin-top:36px">
+      <h3>How each week works</h3>
+      <ul style="padding-left:20px">
+        <li><strong>📖 Lesson:</strong> grammar, structure, vocabulary, nuance, and slang. Tap any green phrase to hear it.</li>
+        <li><strong>✍️ Drills:</strong> type the conjugation, get instant feedback.</li>
+        <li><strong>🃏 Flashcards:</strong> flip, listen, and say it out loud (Chrome checks your pronunciation).</li>
+        <li><strong>✅ Quiz:</strong> 80% to pass and unlock the next week.</li>
+        <li><strong>💬 Tutor:</strong> conversation practice that corrects you like a teacher.</li>
+      </ul>
+      <p class="muted" style="margin-top:12px;font-size:.85rem">Course material draws on openly licensed and public domain resources, including the FSI Brazilian Portuguese courses (public domain), Wikibooks and Wikivoyage (CC BY-SA), and Tatoeba (CC BY).</p>
+    </section>
+  </main>
+
+  <dialog id="settings">
+    <h3>Sync and tutor</h3>
+    <p class="muted">Enter your private sync key to unlock the AI tutor and sync progress across your devices.</p>
+    <input id="sync-key" type="password" autocomplete="off" placeholder="Sync key">
+    <div style="display:flex;gap:8px;justify-content:space-between;flex-wrap:wrap">
+      <button class="btn" id="settings-reset">Clear this browser's progress</button>
+      <span style="display:flex;gap:8px">
+        <button class="btn" onclick="this.closest('dialog').close()">Cancel</button>
+        <button class="btn primary" id="settings-save">Save</button>
+      </span>
+    </div>
+  </dialog>
+
+  <script src="course.js"></script>
+</body>
+</html>
